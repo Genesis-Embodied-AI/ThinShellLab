@@ -1,0 +1,11 @@
+python run_cmaes_all.py \
+  --abs_step 5 \
+  --tot_step 30 \
+  --iter 15 \
+  --trial soft_20000_2 \
+  --pop_size 40 \
+  --sigma 2.5 \
+  --env interact \
+  --Kb 0.1 \
+  --mu 5.0 \
+  --dense 20000.0

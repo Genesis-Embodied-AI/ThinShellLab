@@ -1,0 +1,11 @@
+python run_cmaes_all.py \
+  --abs_step 5 \
+  --tot_step 50 \
+  --iter 15 \
+  --trial 3 \
+  --pop_size 40 \
+  --sigma 1.0 \
+  --env lift \
+  --Kb 100 \
+  --mu 5.0 \
+  --max_dist 0.001

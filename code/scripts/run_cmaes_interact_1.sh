@@ -1,0 +1,12 @@
+python run_cmaes_all.py \
+  --abs_step 5 \
+  --tot_step 30 \
+  --iter 10 \
+  --trial following_heavy_20000_3 \
+  --pop_size 40 \
+  --sigma 2.5 \
+  --env interact \
+  --Kb 100 \
+  --mu 5.0 \
+  --dense 20000.0 \
+  --reward_name compute_reward_1

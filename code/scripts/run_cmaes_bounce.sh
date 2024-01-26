@@ -1,0 +1,11 @@
+python run_cmaes_all.py \
+  --abs_step 9 \
+  --tot_step 90 \
+  --iter 15 \
+  --trial 2 \
+  --pop_size 40 \
+  --sigma 2.5 \
+  --env bounce \
+  --Kb 500 \
+  --max_dist 0.001 \
+  --mu 0.2

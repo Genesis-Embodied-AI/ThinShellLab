@@ -1,0 +1,13 @@
+python run_cmaes_flatlift.py \
+  --abs_step 5 \
+  --tot_step 90 \
+  --iter 10 \
+  --trial flatlift_catch \
+  --pop_size 40 \
+  --sigma 2.5 \
+  --env balance \
+  --Kb 100 \
+  --mu 5.0 \
+  --load_dir ../data/flatlift_state \
+  --max_dist 0.001 \
+  --reward_name compute_reward_flatlift_catch

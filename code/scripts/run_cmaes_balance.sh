@@ -1,0 +1,13 @@
+python run_cmaes_all.py \
+  --abs_step 10 \
+  --tot_step 50 \
+  --iter 10 \
+  --trial balance_soft_more_4 \
+  --pop_size 40 \
+  --sigma 2.5 \
+  --env balance \
+  --Kb 100 \
+  --mu 5.0 \
+  --max_dist 0.001 \
+  --reward_name compute_reward_all \
+  --load_dir ../data/balance_state
