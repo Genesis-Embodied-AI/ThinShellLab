@@ -4,17 +4,9 @@ from model_fold_offset_new import Cloth
 from model_elastic_offset import Elastic
 from model_elastic_tactile import Elastic as tactile
 
-from typing import List
 import taichi as ti
-import torch
 from dataclasses import dataclass
-import os
 import numpy as np
-import matplotlib.pyplot as plt
-import linalg
-from gripper import gripper
-
-from sparse_solver import SparseMatrix
 from BaseScene import BaseScene
 
 vec3 = ti.types.vector(3, ti.f64)

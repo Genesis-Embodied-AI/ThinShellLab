@@ -1,11 +1,11 @@
-python run_cmaes_all.py \
+python training/run_cmaes_all.py \
   --abs_step 5 \
   --tot_step 30 \
-  --iter 10 \
-  --trial sep_heavy_20000_4 \
+  --iter 15 \
+  --trial soft \
   --pop_size 40 \
-  --sigma 2.0 \
+  --sigma 2.5 \
   --env interact \
-  --Kb 100 \
+  --Kb 0.1 \
   --mu 5.0 \
   --dense 20000.0

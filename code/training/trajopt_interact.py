@@ -94,7 +94,6 @@ for ww in range(args.l, args.r):
     window.save_image(os.path.join(save_path, f"0.png"))
     plot_x = []
     plot_y = []
-    agent.init_traj_interact()
     if args.load_traj is not None:
         traj_np = np.load(args.load_traj)
         agent.fix_action(0.015)

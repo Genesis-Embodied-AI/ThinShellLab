@@ -36,7 +36,6 @@ ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32
 
 from geometry import projection_query
 import linalg
-from analytic_grad_single import Grad
 from agent.traj_opt_single import agent_trajopt
 import cma
 import importlib
@@ -111,10 +110,6 @@ def evaluate(x):
                     for k in range(3):
                         agent.traj[i, j, k] = agent.traj[i - 1, j, k] + (x[ii * 6 * gripper_cnt + j * 6 + k] - 5) / sub_steps / scaling
                         agent.traj[i, j, k + 3] = agent.traj[i - 1, j, k + 3] + (x[ii * 6 * gripper_cnt + j * 6 + k + 3] - 5) / sub_steps / scaling_angle
-                if args.env == "lift" and i < 5:
-                    agent.traj[i, 0, 2] += -0.0004
-                    agent.traj[i, 1, 4] += 0.001
-                    agent.traj[i, 2, 4] += -0.001
 
     agent.fix_action(0.015)
 
@@ -206,10 +201,6 @@ for ww in range(args.iter):
                                     x[ii * 6 * gripper_cnt + j * 6 + k] - 5) / sub_steps / scaling
                         agent.traj[i, j, k + 3] = agent.traj[i - 1, j, k + 3] + (
                                     x[ii * 6 * gripper_cnt + j * 6 + k + 3] - 5) / sub_steps / scaling_angle
-                if args.env == "lift" and i < 5:
-                    agent.traj[i, 0, 2] += -0.0004
-                    agent.traj[i, 1, 4] += 0.001
-                    agent.traj[i, 2, 4] += -0.001
     agent.fix_action(0.015)
     np_traj = agent.traj.to_numpy()
     np.save(os.path.join(save_path, f"traj_{ww}.npy"), np_traj)

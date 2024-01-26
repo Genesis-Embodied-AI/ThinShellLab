@@ -215,39 +215,14 @@ class agent_trajopt:
         for i in range(8):
             self.traj[i, 0, 2] = -0.0006 * i
             self.traj[i, 1, 2] = -0.0006 * i
-            self.traj[i, 0, 0] = self.traj[i - 1, 0, 0] + 0.0001
-            self.traj[i, 1, 0] = self.traj[i - 1, 1, 0] - 0.0001
-        # for i in range(8, 50):
-        #     self.traj[i, 0, 2] = self.traj[i - 1, 0, 2]
-        #     self.traj[i, 1, 2] = self.traj[i - 1, 1, 2]
-        #     self.traj[i, 0, 0] = self.traj[i - 1, 0, 0]
-        #     self.traj[i, 1, 0] = self.traj[i - 1, 1, 0]
-        for i in range(8, 21):
-            self.traj[i, 0, 0] = self.traj[i - 1, 0, 0] + 0.00015
-            self.traj[i, 1, 0] = self.traj[i - 1, 1, 0] - 0.00015
-            self.traj[i, 0, 2] = self.traj[i - 1, 0, 2] - 0.0001
-            self.traj[i, 1, 2] = self.traj[i - 1, 1, 2] - 0.0001
-        for i in range(21, 40):
-            self.traj[i, 0, 0] = self.traj[i - 1, 0, 0] + 0.0002
-            self.traj[i, 1, 0] = self.traj[i - 1, 1, 0] - 0.0002
+            self.traj[i, 0, 0] = self.traj[i - 1, 0, 0]
+            self.traj[i, 1, 0] = self.traj[i - 1, 1, 0]
+        for i in range(8, 50):
             self.traj[i, 0, 2] = self.traj[i - 1, 0, 2]
             self.traj[i, 1, 2] = self.traj[i - 1, 1, 2]
-            self.traj[i, 0, 4] = self.traj[i - 1, 0, 4] - 0.003
-            self.traj[i, 1, 4] = self.traj[i - 1, 1, 4] + 0.003
-        for i in range(40, 50):
-            self.traj[i, 0, 0] = self.traj[i - 1, 0, 0] + 0.0003
-            self.traj[i, 1, 0] = self.traj[i - 1, 1, 0] - 0.0003
-            self.traj[i, 0, 2] = self.traj[i - 1, 0, 2]
-            self.traj[i, 1, 2] = self.traj[i - 1, 1, 2]
-            self.traj[i, 0, 4] = self.traj[i - 1, 0, 4] - 0.01
-            self.traj[i, 1, 4] = self.traj[i - 1, 1, 4] + 0.01
-        # for i in range(50, 80):
-        #     self.traj[i, 0, 0] = self.traj[i - 1, 0, 0] + 0.00015
-        #     self.traj[i, 1, 0] = self.traj[i - 1, 1, 0] - 0.00015
-        #     self.traj[i, 0, 2] = self.traj[i - 1, 0, 2] + 0.00003
-        #     self.traj[i, 1, 2] = self.traj[i - 1, 1, 2] + 0.00003
-        #     self.traj[i, 0, 4] = self.traj[i - 1, 0, 4]
-        #     self.traj[i, 1, 4] = self.traj[i - 1, 1, 4]
+            self.traj[i, 0, 0] = self.traj[i - 1, 0, 0]
+            self.traj[i, 1, 0] = self.traj[i - 1, 1, 0]
+
 
     def init_traj_card(self):
         for i in range(5):
@@ -396,8 +371,6 @@ class agent_trajopt:
 
     def init_traj_interact(self):
         self.traj.fill(0)
-        for i in range(5, 30):
-            self.traj[i, 0, 0] = self.traj[i - 1, 0, 0] - 0.002
 
     def init_traj_flatlift(self):
         # self.traj.fill(0)

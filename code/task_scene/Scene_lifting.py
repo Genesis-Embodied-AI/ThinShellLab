@@ -10,11 +10,6 @@ from dataclasses import dataclass
 from model_elastic_tactile import Elastic as tactile
 import os
 import numpy as np
-import matplotlib.pyplot as plt
-import linalg
-from gripper import gripper
-
-from sparse_solver import SparseMatrix
 from BaseScene import BaseScene
 
 vec3 = ti.types.vector(3, ti.f64)

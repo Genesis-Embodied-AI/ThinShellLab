@@ -11,11 +11,6 @@ from dataclasses import dataclass
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-import linalg
-from gripper import gripper
-import contact_diff
-
-from sparse_solver import SparseMatrix
 from BaseScene import BaseScene
 
 vec3 = ti.types.vector(3, ti.f64)
