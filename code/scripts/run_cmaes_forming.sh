@@ -1,4 +1,4 @@
-python train/run_cmaes_all.py \
+python training/run_cmaes_all.py \
   --abs_step 5 \
   --tot_step 50 \
   --iter 15 \

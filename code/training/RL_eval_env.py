@@ -25,7 +25,7 @@ class EvalEnv(Env):
             rewards : taichi env's -loss
         """
         if self.reward_name is None:
-            if self.sys_name == "push":
+            if self.sys_name == "forming":
                 rewards = self.sys.compute_reward(self.target_pos)
             else:
                 rewards = self.sys.compute_reward()

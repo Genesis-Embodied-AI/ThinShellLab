@@ -4,8 +4,8 @@ python training/run_cmaes_parameter.py \
   --trial 0 \
   --pop_size 10 \
   --sigma 0.1 \
-  --env slide \
+  --env card \
   --Kb 1000 \
   --mu 1.0 \
   --mu_cloth 0.001 \
-  --traj init_traj_slide
+  --traj init_traj_card

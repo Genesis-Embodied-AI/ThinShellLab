@@ -1,0 +1,1 @@
+python training/trajopt_bouncing.py --l 0 --r 1 --iter 50 --tot_step 30 --lr 100000

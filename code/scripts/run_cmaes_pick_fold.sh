@@ -1,8 +1,8 @@
-python run_cmaes_all.py \
+python training/run_cmaes_all.py \
   --abs_step 10 \
   --tot_step 50 \
-  --iter 100 \
-  --trial more_iter_4 \
+  --iter 30 \
+  --trial 1 \
   --pop_size 40 \
   --sigma 2.5 \
   --env pick \

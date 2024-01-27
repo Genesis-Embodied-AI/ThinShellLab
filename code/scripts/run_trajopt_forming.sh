@@ -1,0 +1,1 @@
+python training/trajopt_forming.py --l 0 --r 1 --tot_step 50 --iter 400 --lr 0.00001 --target_dir ../data/push_pos_save/cloth_pos.npy

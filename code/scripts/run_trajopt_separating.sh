@@ -1,1 +1,1 @@
-python training/trajopt_folding.py --l 12 --r 13 --iter 400 --tot_step 50 --lr 0.00003 --curve7 1 --curve8 -1
+python training/trajopt_interact.py --l 0 --r 1 --iter 400 --tot_step 50 --lr 0.00001 --sep

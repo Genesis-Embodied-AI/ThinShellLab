@@ -62,7 +62,7 @@ class Env(gym.Env):
 
         cloth_size = 0.06
         self.model = model
-        if sys_name == "folding_2" or  sys_name == "push":
+        if sys_name == "folding" or sys_name == "forming":
             cloth_size = 0.1
         self.sys_name = sys_name
 
@@ -74,8 +74,8 @@ class Env(gym.Env):
             sys = Scene.Scene(cloth_size=cloth_size)
 
         self.target_pos = None
-        if sys_name == "push":
-            self.target_pos = np.load("../data/push_pos_save/cloth_pos.npy")
+        if sys_name == "forming":
+            self.target_pos = np.load("../data/forming_pos_save/cloth_pos.npy")
         self.sys = sys
         self.sys.init_all()
         self.sys.cloths[0].Kb[None] = Kb
@@ -198,7 +198,7 @@ class Env(gym.Env):
         """
         # calculate detailed rewards --> the same as taichi env is OK
         if self.reward_name is None:
-            if self.sys_name == "push":
+            if self.sys_name == "forming":
                 rewards = self.sys.compute_reward(self.target_pos)
             else:
                 rewards = self.sys.compute_reward()
@@ -222,7 +222,7 @@ class Env(gym.Env):
         """
         # calculate detailed rewards --> the same as taichi env is OK
         if self.reward_name is None:
-            if self.sys_name == "push":
+            if self.sys_name == "forming":
                 rewards = self.sys.compute_reward(self.target_pos)
             else:
                 rewards = self.sys.compute_reward()

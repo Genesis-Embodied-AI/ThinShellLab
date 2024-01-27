@@ -1,0 +1,1 @@
+python training/trajopt_card.py --l 0 --r 1 --iter 50 --tot_step 80 --lr 20000 --Kb 1400

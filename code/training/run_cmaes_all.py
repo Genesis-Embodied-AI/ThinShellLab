@@ -47,7 +47,7 @@ Scene = importlib.import_module(f'Scene_{args.env}')
 
 tot_timestep = args.tot_step
 cloth_size=0.06
-if args.env == "folding_2" or args.env == "push":
+if args.env == "folding_2" or args.env == "forming":
     cloth_size = 0.1
 
 if args.Kb < 2:
@@ -117,7 +117,7 @@ def evaluate(x):
     stop_step = 0
     tot_reward = 0
     target = None
-    if args.env == "push":
+    if args.env == "forming":
         target = np.load(args.target_dir)
     if args.env == "balancing" or args.env == "bounce":
         analy_grad.copy_pos(sys, 0)
