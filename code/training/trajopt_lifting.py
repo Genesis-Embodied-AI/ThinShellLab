@@ -86,7 +86,6 @@ for ww in range(args.l, args.r):
     if args.load_traj is not None:
         agent.traj.from_numpy(np.load(args.load_traj))
     agent.fix_action(0.015)
-    agent.smooth()
     adam.reset()
 
     for i in range(args.iter):
