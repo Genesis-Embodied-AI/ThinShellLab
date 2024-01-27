@@ -1,6 +1,6 @@
 import taichi as ti
 
-from model_fold_offset import Cloth
+from model_fold_offset_new import Cloth
 from model_elastic_offset import Elastic
 
 import taichi as ti
@@ -154,18 +154,7 @@ class Scene(BaseScene):
         return ret
 
     @ti.kernel
-    def compute_reward_side(self, analy_grad: ti.template()) -> ti.f64:
-        ret = 0.0
-        tt = (self.cloth_N + 1) // 4 * (self.cloth_M + 1) + (self.cloth_M + 1) // 2
-        for i, j in ti.ndrange(self.elastics[0].n_verts, analy_grad.tot_timestep):
-            ret -= (analy_grad.pos_buffer[j, self.elastics[0].offset + i, 0] - analy_grad.pos_buffer[
-                j, self.cloths[0].offset + tt, 0]) ** 2
-            ret -= (analy_grad.pos_buffer[j, self.elastics[0].offset + i, 1] - analy_grad.pos_buffer[
-                j, self.cloths[0].offset + tt, 1]) ** 2
-        return ret
-
-    @ti.kernel
-    def compute_reward_flatlift(self, analy_grad: ti.template()) -> ti.f64:
+    def compute_reward_throwing(self, analy_grad: ti.template()) -> ti.f64:
         ret = 0.0
         tt = (self.cloth_N + 1) // 2 * (self.cloth_M + 1) + (self.cloth_M + 1) // 2
         for i in range(self.elastics[0].n_verts):
@@ -178,27 +167,7 @@ class Scene(BaseScene):
         return ret
 
     @ti.kernel
-    def compute_reward_flatlift_catch(self, analy_grad: ti.template()) -> ti.f64:
-        ret = 0.0
-        tt = (self.cloth_N + 1) // 2 * (self.cloth_M + 1) + (self.cloth_M + 1) // 2
-        for i in range(self.elastics[0].n_verts):
-            ret += analy_grad.pos_buffer[49, self.elastics[0].offset + i, 2]
-            ret -= 10 * (analy_grad.pos_buffer[analy_grad.tot_timestep - 1, self.elastics[0].offset + i, 2] - analy_grad.pos_buffer[0, self.elastics[0].offset + i, 2]) ** 2
-            ret -= 100 * (analy_grad.pos_buffer[analy_grad.tot_timestep - 1, self.elastics[0].offset + i, 0] -
-                          analy_grad.pos_buffer[analy_grad.tot_timestep - 1, self.cloths[0].offset + tt, 0]) ** 2
-            ret -= 100 * (analy_grad.pos_buffer[analy_grad.tot_timestep - 1, self.elastics[0].offset + i, 1] -
-                          analy_grad.pos_buffer[analy_grad.tot_timestep - 1, self.cloths[0].offset + tt, 1]) ** 2
-
-        for i in range(self.cloth_M + 1):
-            ret -= 10 * (analy_grad.pos_buffer[49, i + self.cloths[0].offset, 2] - 0.0) ** 2
-            ret -= 10 * (analy_grad.pos_buffer[49, i + self.cloth_N * (self.cloth_M + 1) + self.cloths[0].offset, 2] - 0.0) ** 2
-            ret -= 10 * (self.cloths[0].pos[i].z - 0.0) ** 2
-            ret -= 10 * (self.cloths[0].pos[i + self.cloth_N * (self.cloth_M + 1)].z - 0.0) ** 2
-
-        return ret
-
-    @ti.kernel
-    def compute_reward_flatlift_RL(self) -> ti.f64:
+    def compute_reward_throwing_RL(self) -> ti.f64:
         ret = 0.0
         tt = (self.cloth_N + 1) // 2 * (self.cloth_M + 1) + (self.cloth_M + 1) // 2
         for i in range(self.elastics[0].n_verts):

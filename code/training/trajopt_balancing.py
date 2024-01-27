@@ -18,13 +18,13 @@ parser.add_argument('--r', type=int, default=5)
 parser.add_argument('--iter', type=int, default=10)
 parser.add_argument('--lr', type=float, default=0.001)
 parser.add_argument('--tot_step', type=int, default=5)
-parser.add_argument('--flatlift', action="store_true", default=False)
+parser.add_argument('--throwing', action="store_true", default=False)
 parser.add_argument('--save', action="store_true", default=False)
 parser.add_argument('--side', action="store_true", default=False)
 parser.add_argument('--load_traj', type=str, default=None)
 parser.add_argument('--render', type=int, default=50)
 parser.add_argument('--Kb', type=float, default=100)
-parser.add_argument('--balance_state', type=str, default="../data/balance_state")
+parser.add_argument('--load_state', type=str, default="../data/balance_state")
 args = parser.parse_args()
 
 ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32, fast_math=False,
@@ -78,8 +78,8 @@ print("tot_NV:", sys.tot_NV)
 
 for ww in range(args.l, args.r):
     save_path = f"../imgs/traj_opt_balance_{ww}"
-    if args.flatlift:
-        save_path = f"../imgs/traj_opt_balance_flatlift_{ww}"
+    if args.throwing:
+        save_path = f"../imgs/traj_opt_balance_throwing_{ww}"
     # sys.init_pos = [(random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.0006]
     if not os.path.exists(save_path):
         os.mkdir(save_path)
@@ -95,14 +95,11 @@ for ww in range(args.l, args.r):
     window.save_image(os.path.join(save_path, f"0.png"))
     plot_x = []
     plot_y = []
-    if args.flatlift:
-        agent.init_traj_flatlift()
-        agent.fix_action(0.015)
+
     if args.load_traj is not None:
         agent.traj.from_numpy(np.load(args.load_traj))
         agent.fix_action(0.015)
-    # else:
-    #     agent.traj.from_numpy(np.load("../data/cmaes_traj_balance_0/traj.npy"))
+
     adam.reset()
     for i in range(args.iter):
         render = False
@@ -113,9 +110,9 @@ for ww in range(args.l, args.r):
         obs_list = []
         action_list = []
         start_time = time.time()
-        state_path = args.balance_state
-        if args.flatlift:
-            state_path = "../data/flatlift_state"
+        state_path = args.load_state
+        if args.throwing:
+            state_path = "../data/throwing_state"
         # if not os.path.exists(state_path):
         #     os.mkdir(state_path)
         if not args.save:
@@ -151,13 +148,10 @@ for ww in range(args.l, args.r):
 
         end_time = time.time()
         print("tot_time:", end_time - start_time)
-        if args.flatlift:
-            tot_reward = sys.compute_reward_flatlift(analy_grad)
+        if args.throwing:
+            tot_reward = sys.compute_reward_throwing(analy_grad)
         else:
-            if args.side:
-                tot_reward = sys.compute_reward_side(analy_grad)
-            else:
-                tot_reward = sys.compute_reward_all(analy_grad)
+            tot_reward = sys.compute_reward_all(analy_grad)
         # if tot_reward > now_reward:
         #     now_reward = tot_reward
         #     data_path = f"../data/data_traj_opt_fold_{ww}"
@@ -186,13 +180,10 @@ for ww in range(args.l, args.r):
             gif_name = filename = os.path.join(save_path, f"GIF{i}.gif")
             imageio.mimsave(gif_name, frames, 'GIF', duration=0.02)
 
-        if args.flatlift:
-            analy_grad.get_loss_flatlift(sys)
+        if args.throwing:
+            analy_grad.get_loss_throwing(sys)
         else:
-            if args.side:
-                analy_grad.get_loss_side(sys)
-            else:
-                analy_grad.get_loss_balance(sys)
+            analy_grad.get_loss_balance(sys)
 
         for i in range(tot_timestep - 1, 0, -1):
             # print("back prop step:", i)

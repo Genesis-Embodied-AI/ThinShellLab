@@ -1,5 +1,5 @@
 python training/run_cmaes_all.py \
-  --abs_step 10 \
+  --abs_step 5 \
   --tot_step 50 \
   --iter 10 \
   --trial 1 \
@@ -8,6 +8,6 @@ python training/run_cmaes_all.py \
   --env balancing \
   --Kb 100 \
   --mu 5.0 \
+  --load_dir ../data/throwing_state \
   --max_dist 0.001 \
-  --reward_name compute_reward_all \
-  --load_dir ../data/balance_state
+  --reward_name compute_reward_throwing

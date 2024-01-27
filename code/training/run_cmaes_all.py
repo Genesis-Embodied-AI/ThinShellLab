@@ -119,7 +119,7 @@ def evaluate(x):
     target = None
     if args.env == "push":
         target = np.load(args.target_dir)
-    if args.env == "balance" or args.env == "bounce":
+    if args.env == "balancing" or args.env == "bounce":
         analy_grad.copy_pos(sys, 0)
     for frame in range(1, tot_timestep):
         agent.get_action(frame)
@@ -130,15 +130,15 @@ def evaluate(x):
             break
 
         stop_step = frame + 1
-        if args.env == "balance" or args.env == "bounce":
+        if args.env == "balancing" or args.env == "bounce":
             analy_grad.copy_pos(sys, frame)
 
     reward = stop_step / tot_timestep * 0.1
     if not early_stop:
-        if (args.reward_name is None) or (args.env == "balance"):
-            if (args.env == "balance"):
-                if args.reward_name == "compute_reward_flatlift":
-                    reward += sys.compute_reward_flatlift(analy_grad) + 10
+        if (args.reward_name is None) or (args.env == "balancing"):
+            if (args.env == "balancing"):
+                if args.reward_name == "compute_reward_throwing":
+                    reward += sys.compute_reward_throwing(analy_grad) + 10
                 else:
                     func = getattr(sys, args.reward_name)
                     if callable(func):
@@ -146,7 +146,7 @@ def evaluate(x):
                     else:
                         print(f"{args.reward_name}, not a callable function!!")
                         exit(0)
-            elif (args.env == "push"):
+            elif (args.env == "forming"):
                 reward += sys.compute_reward(target) + 5
             elif (args.env == "bounce"):
                 reward += sys.compute_reward(analy_grad) + 5

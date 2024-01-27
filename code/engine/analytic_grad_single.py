@@ -460,38 +460,16 @@ class Grad:
                 j + 1, sys.cloths[0].offset + tt, 1])
 
     @ti.kernel
-    def get_loss_flatlift(self, sys: ti.template()):
+    def get_loss_throwing(self, sys: ti.template()):
 
-        # for i, j in ti.ndrange(sys.elastics[0].n_verts, self.tot_timestep - 1):
-        #     self.pos_grad[j + 1, sys.elastics[0].offset + i, 2] = -1
-        #
-        # for i, j in ti.ndrange(sys.cloth_M, self.tot_timestep - 1):
-        #     self.pos_grad[j + 1, sys.cloths[0].offset + i, 2] = 20 * self.pos_buffer[j + 1, sys.cloths[0].offset + i, 2]
-        #     self.pos_grad[j + 1, sys.cloths[0].offset + i + sys.cloth_N * (sys.cloth_M + 1), 2] = 20 * self.pos_buffer[
-        #         j + 1, sys.cloths[0].offset + i + sys.cloth_N * (sys.cloth_M + 1), 2]
-        tt = (sys.cloth_N + 1) // 2 * (sys.cloth_M + 1) + (sys.cloth_M + 1) // 2
-        for i in range(sys.elastics[0].n_verts):
-            # self.pos_grad[self.tot_timestep // 4, sys.elastics[0].offset + i, 2] = -1
-            # self.pos_grad[self.tot_timestep + (self.tot_timestep // 4), sys.elastics[0].offset + i, 2] = -1
-            self.pos_grad[self.tot_timestep - 1, sys.elastics[0].offset + i, 2] = -1
-            self.pos_grad[self.tot_timestep - 1, sys.elastics[0].offset + i, 0] = 20 * (
-                    self.pos_buffer[self.tot_timestep - 1, sys.elastics[0].offset + i, 0] - self.pos_buffer[
-                self.tot_timestep - 1, sys.cloths[0].offset + tt, 0])
-            self.pos_grad[self.tot_timestep - 1, sys.elastics[0].offset + i, 1] = 20 * (
-                    self.pos_buffer[self.tot_timestep - 1, sys.elastics[0].offset + i, 1] - self.pos_buffer[
-                self.tot_timestep - 1, sys.cloths[0].offset + tt, 1])
-            self.pos_grad[self.tot_timestep - 1, sys.cloths[0].offset + tt, 0] = -20 * (
-                    self.pos_buffer[self.tot_timestep - 1, sys.elastics[0].offset + i, 0] - self.pos_buffer[
-                self.tot_timestep - 1, sys.cloths[0].offset + tt, 0])
-            self.pos_grad[self.tot_timestep - 1, sys.cloths[0].offset + tt, 1] = -20 * (
-                    self.pos_buffer[self.tot_timestep - 1, sys.elastics[0].offset + i, 1] - self.pos_buffer[
-                self.tot_timestep - 1, sys.cloths[0].offset + tt, 1])
+        for i, j in ti.ndrange(sys.elastics[0].n_verts, self.tot_timestep - 1):
+            self.pos_grad[j + 1, sys.elastics[0].offset + i, 2] = -1
 
-        for i in range(sys.cloth_M + 1):
-            self.pos_grad[self.tot_timestep - 1, sys.cloths[0].offset + i, 2] = 20 * self.pos_buffer[
-                self.tot_timestep - 1, sys.cloths[0].offset + i, 2]
-            self.pos_grad[self.tot_timestep - 1, sys.cloths[0].offset + i + sys.cloth_N * (sys.cloth_M + 1), 2] = 20 * self.pos_buffer[
-                self.tot_timestep - 1, sys.cloths[0].offset + i + sys.cloth_N * (sys.cloth_M + 1), 2]
+        for i, j in ti.ndrange(sys.cloth_M, self.tot_timestep - 1):
+            self.pos_grad[j + 1, sys.cloths[0].offset + i, 2] = 20 * self.pos_buffer[j + 1, sys.cloths[0].offset + i, 2]
+            self.pos_grad[j + 1, sys.cloths[0].offset + i + sys.cloth_N * (sys.cloth_M + 1), 2] = 20 * self.pos_buffer[
+                j + 1, sys.cloths[0].offset + i + sys.cloth_N * (sys.cloth_M + 1), 2]
+
 
     @ti.kernel
     def print_out(self, sys: ti.template()):
