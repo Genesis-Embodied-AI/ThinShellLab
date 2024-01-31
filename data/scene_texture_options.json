@@ -1,0 +1,454 @@
+{
+    "card": {
+        "environment": {
+            "type": "indoor_2",
+            "rotation": 144
+        },
+        "clothes": [ {
+            "type": "poker_1"
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+            "type": "pure_3"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": 0,
+            "rotation": 0,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "card_3": {
+        "environment": {
+            "type": "indoor_2_dark",
+            "rotation": -36
+        },
+        "camera": {
+            "position": [0, -0.30, 0.20],
+            "look_at": [0, 0.02, 0]
+        },
+        "clothes": [ {
+            "type": "poker_1"
+        }, {
+            "type": "poker_2"
+        }, {
+            "type": "poker_3"
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+            "type": "pure_3"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": 0,
+            "right_limit": 0.03,
+            "rotation": 90,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "folding_2": {
+        "environment": {
+            "type": "indoor_1",
+            "rotation": 155
+        },
+        "clothes": [ {
+            "type": "genesis_paper_curve",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0001,
+            "rotation": 0,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "folding_real": {
+        "environment": {
+            "type": "indoor_1",
+            "rotation": 155
+        },
+        "camera": {
+            "position": [0.0, -0.50, 0.18],
+            "look_at": [0.03, 0.0, 0.0]
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_1_solid",
+            "rigid": true
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0001,
+            "rotation": 0,
+            "scale": 1.0,
+            "replace": true
+        }
+    },
+    "interact": {
+        "environment": {
+            "type": "indoor_2_dark",
+            "rotation": 144
+        },
+        "camera": {
+            "position": [-0.035, 0.19, 0.09],
+            "look_at": [-0.035, 0, 0]
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+	        "type": "wood_2"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0002,
+            "right_limit": 0.028,
+            "rotation": 180,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "interact_soft": {
+        "environment": {
+            "type": "indoor_2_dark",
+            "rotation": 144
+        },
+        "camera": {
+            "position": [-0.035, 0.19, 0.09],
+            "look_at": [-0.035, 0, 0]
+        },
+        "clothes": [ {
+            "type": "cloth_2"
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+	        "type": "wood_2"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0002,
+            "right_limit": 0.028,
+            "rotation": 180,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "lift": {
+        "environment": "indoor_2",
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "wood_3"
+        }, {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+            "type": "pure_3"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.015,
+            "rotation": 0,
+            "scale": 0.5,
+            "replace": false
+        }
+    },
+    "pick": {
+        "environment": {
+            "type": "indoor_1",
+            "rotation": 155
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "wood_1"
+        }, {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        } ],
+        "table": {
+            "type": "round_table",
+            "up_limit": -0.0081,
+            "rotation": 0,
+            "scale": 0.25,
+            "replace": false
+        }
+    },
+    "pick_3": {
+        "environment": {
+            "type": "indoor_1",
+            "rotation": 155
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "wood_1"
+        }, {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+            "type": "pure_3"
+        } ],
+        "table": {
+            "type": "round_table",
+            "up_limit": -0.0081,
+            "rotation": 0,
+            "scale": 0.25,
+            "replace": false
+        }
+    },
+    "push": {
+        "environment": {
+            "type": "indoor_2",
+            "rotation": 144
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0001,
+            "rotation": 0,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "slide": {
+        "environment": {
+            "type": "indoor_1",
+            "rotation": 155
+        },
+        "camera": {
+            "position": [-0.01, 0.19, 0.09],
+            "look_at": [-0.01, 0, 0]
+        },
+        "clothes": [ {
+            "type": "postcard_2"
+        }, {
+            "type": "postcard_1"
+        }, {
+            "type": "postcard_2"
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        } ],
+        "table": {
+            "type": "round_table",
+            "up_limit": -0.0001,
+            "rotation": 0,
+            "scale": 0.25,
+            "replace": true
+        }
+    },
+    "table": {
+        "environment": {
+            "type": "indoor_2",
+            "rotation": 144
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": 0,
+            "rotation": 0,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "real_paper_wya": {
+        "environment": {
+            "type": "indoor_2_dark",
+            "rotation": -36
+        },
+        "camera": {
+            "position": [-0.04, -0.70, 0.35],
+            "look_at": [-0.04, 0, 0]
+        },
+        "clothes": [ {
+            "type": "genesis_paper"
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+	        "type": "paperbox"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0002,
+            "right_limit": 0.05,
+            "rotation": 180,
+            "scale": 1.0,
+            "replace": true
+        }
+    },
+    "balance": {
+        "environment": {
+            "type": "indoor_2",
+            "rotation": 144
+        },
+        "camera": {
+            "position": [-0.15, 0.15, 0.09],
+            "look_at": [0.0, 0.0, 0.0]
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_3"
+        }, {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        }, {
+            "type": "pure_1"
+        }, {
+            "type": "pure_2"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0155,
+            "rotation": 0,
+            "scale": 0.5,
+            "replace": false
+        }
+    },
+    "book": {
+        "environment": {
+            "type": "indoor_1",
+            "rotation": 155
+        },
+        "clothes": [ {
+            "type": "genesis_paper",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "wood_1"
+        }, {
+            "type": "pure_1"
+        } ],
+        "table": {
+            "type": "round_table",
+            "up_limit": -0.0081,
+            "rotation": 0,
+            "scale": 0.25,
+            "replace": false
+        }
+    },
+    "bounce_1": {
+        "environment": {
+            "type": "indoor_2_dark",
+            "rotation": 144
+        },
+        "camera": {
+            "position": [-0.035, 0.19, 0.09],
+            "look_at": [-0.035, 0, 0]
+        },
+        "clothes": [ {
+            "type": "cloth_2",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0002,
+            "right_limit": 0.0,
+            "rotation": 180,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "bounce_2": {
+        "environment": {
+            "type": "indoor_2_dark",
+            "rotation": 144
+        },
+        "camera": {
+            "position": [-0.035, 0.19, 0.09],
+            "look_at": [-0.035, 0, 0]
+        },
+        "clothes": [ {
+            "type": "pure_1",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0002,
+            "right_limit": 0.0,
+            "rotation": 180,
+            "scale": 0.5,
+            "replace": true
+        }
+    },
+    "bounce_3": {
+        "environment": {
+            "type": "indoor_2_dark",
+            "rotation": 144
+        },
+        "camera": {
+            "position": [-0.035, 0.19, 0.09],
+            "look_at": [-0.035, 0, 0]
+        },
+        "clothes": [ {
+            "type": "iron_1",
+            "thickness": 0.0002
+        } ],
+        "elastics": [ {
+            "type": "pure_1"
+        } ],
+        "table": {
+            "type": "wood_table_1",
+            "up_limit": -0.0002,
+            "right_limit": 0.0,
+            "rotation": 180,
+            "scale": 0.5,
+            "replace": true
+        }
+    }
+}
