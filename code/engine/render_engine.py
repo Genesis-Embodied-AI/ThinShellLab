@@ -136,9 +136,9 @@ table_presets = {
     "round_table": get_asset_table("round_table", clamp_normal=0.999),
 }
 env_presets = {
-    "indoor_1": get_asset_background("lebombo", image_scale=0.8),               # rotation=155
-    "indoor_2": get_asset_background("brown_photostudio_02", image_scale=0.9),  # rotation=144, 54
-    "indoor_2_dark": get_asset_background("brown_photostudio_02", image_scale=0.7),   # rotation=144, -36
+    "indoor_1": get_asset_background("lebombo", image_scale=0.8),                       # rotation=155
+    "indoor_2": get_asset_background("brown_photostudio_02", image_scale=0.9),          # rotation=144, 54
+    "indoor_2_dark": get_asset_background("brown_photostudio_02", image_scale=0.7),     # rotation=144, -36
 }
 
 def parse_setting(preset_setting, setting_type):
@@ -202,7 +202,7 @@ class TaichiRender:
         self.env_name = env_name
         self.window = ti.ui.Window(env_name, res=res, vsync=True, show_window=show_window)
         self.show_window = show_window
-        self.save_dir = os.path.join(save_dir, env_name)
+        self.save_dir = save_dir
         if self.save_dir is not None:
             os.makedirs(self.save_dir, exist_ok=True)
         self.canvas = self.window.get_canvas()
@@ -235,7 +235,7 @@ class LuisaScriptRender:
     def __init__(self, scene_sys, env_name, save_dir, config_path="../data/scene_texture_options.json"):
         self.scene_sys = scene_sys
         self.env_name = env_name
-        self.save_dir = os.path.join(save_dir, env_name)
+        self.save_dir = save_dir
 
         render_dict = json.load(open(config_path, "r"))
         if self.env_name not in render_dict:

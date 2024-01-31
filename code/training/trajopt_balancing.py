@@ -11,6 +11,7 @@ from optimizer.optim import Adam_single
 import random
 from argparse import ArgumentParser
 import matplotlib.pyplot as plt
+from engine.render_engine import Renderer
 
 parser = ArgumentParser()
 parser.add_argument('--l', type=int, default=0)
@@ -23,6 +24,7 @@ parser.add_argument('--save', action="store_true", default=False)
 parser.add_argument('--side', action="store_true", default=False)
 parser.add_argument('--load_traj', type=str, default=None)
 parser.add_argument('--render', type=int, default=50)
+parser.add_argument('--render_option', type=str, default="Taichi")
 parser.add_argument('--Kb', type=float, default=100)
 parser.add_argument('--load_state', type=str, default="../data/balance_state")
 args = parser.parse_args()
@@ -63,36 +65,39 @@ sys.init_all()
 sys.get_colors(colors)
 analy_grad.init_mass(sys)
 
-window = ti.ui.Window('surface test', res=(800, 800), vsync=True, show_window=False)
-canvas = window.get_canvas()
-canvas.set_background_color((0.5, 0.5, 0.5))
-scene = ti.ui.Scene()
-camera = ti.ui.Camera()
-camera.position(-0.2, 0.2, 0.05)
-camera.lookat(0, 0, 0)
-camera.up(0, 0, 1)
+# window = ti.ui.Window('surface test', res=(800, 800), vsync=True, show_window=False)
+# canvas = window.get_canvas()
+# canvas.set_background_color((0.5, 0.5, 0.5))
+# scene = ti.ui.Scene()
+# camera = ti.ui.Camera()
+# camera.position(-0.2, 0.2, 0.05)
+# camera.lookat(0, 0, 0)
+# camera.up(0, 0, 1)
 
 now_reward = -100000
-
 print("tot_NV:", sys.tot_NV)
 
 for ww in range(args.l, args.r):
-    save_path = f"../imgs/traj_opt_balance_{ww}"
     if args.throwing:
-        save_path = f"../imgs/traj_opt_balance_throwing_{ww}"
+        save_dir = f"../imgs/traj_opt_balance_throwing_{ww}"
+    else:
+        save_dir = f"../imgs/traj_opt_balance_{ww}"
+    renderer = Renderer(sys, "balancing", save_dir, option=args.render_option)
+
     # sys.init_pos = [(random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.0006]
-    if not os.path.exists(save_path):
-        os.mkdir(save_path)
-    print(f"Saving Path: {save_path}")
+    if not os.path.exists(save_dir):
+        os.mkdir(save_dir)
+    print(f"Saving Path: {save_dir}")
 
     sys.reset()
     sys.mu_cloth_elastic[None] = 5.0
-    scene.set_camera(camera)
-    scene.ambient_light([0.8, 0.8, 0.8])
-    scene.point_light((2, 2, 2), (1, 1, 1))
-    scene.mesh(sys.x32, indices=sys.f_vis, per_vertex_color=colors)  # , index_offset=(nf//2)*3, index_count=(nf//2)*3)
-    canvas.scene(scene)
-    window.save_image(os.path.join(save_path, f"0.png"))
+    renderer.render(sys, "0")
+    # scene.set_camera(camera)
+    # scene.ambient_light([0.8, 0.8, 0.8])
+    # scene.point_light((2, 2, 2), (1, 1, 1))
+    # scene.mesh(sys.x32, indices=sys.f_vis, per_vertex_color=colors)  # , index_offset=(nf//2)*3, index_count=(nf//2)*3)
+    # canvas.scene(scene)
+    # window.save_image(os.path.join(save_path, f"0.png"))
     plot_x = []
     plot_y = []
 
@@ -134,14 +139,15 @@ for ww in range(args.l, args.r):
             sys.time_step(projection_query, frame)
             analy_grad.copy_pos(sys, frame)
             if render:
-                scene.set_camera(camera)
-                scene.ambient_light([0.8, 0.8, 0.8])
-                scene.point_light((2, 2, 2), (1, 1, 1))
-                # sys.cloths[0].update_visual()
-                scene.mesh(sys.x32, indices=sys.f_vis,
-                           per_vertex_color=colors)  # , index_offset=(nf//2)*3, index_count=(nf//2)*3)
-                canvas.scene(scene)
-                window.save_image(os.path.join(save_path, f"{frame}.png"))
+                renderer.render(sys, str(frame))
+                # scene.set_camera(camera)
+                # scene.ambient_light([0.8, 0.8, 0.8])
+                # scene.point_light((2, 2, 2), (1, 1, 1))
+                # # sys.cloths[0].update_visual()
+                # scene.mesh(sys.x32, indices=sys.f_vis,
+                #            per_vertex_color=colors)  # , index_offset=(nf//2)*3, index_count=(nf//2)*3)
+                # canvas.scene(scene)
+                # window.save_image(os.path.join(save_path, f"{frame}.png"))
 
         if args.save:
             sys.save_all(state_path)
@@ -168,8 +174,8 @@ for ww in range(args.l, args.r):
         print("total_reward:", plot_y)
         if tot_reward > now_reward:
             now_reward = tot_reward
-            np.save(os.path.join(save_path, "best_traj.npy"), agent.traj.to_numpy())
-        np.save(os.path.join(save_path, "plot_data.npy"), np.array(plot_y))
+            np.save(os.path.join(save_dir, "best_traj.npy"), agent.traj.to_numpy())
+        np.save(os.path.join(save_dir, "plot_data.npy"), np.array(plot_y))
 
         if render:
             frames = []
@@ -198,4 +204,4 @@ for ww in range(args.l, args.r):
         analy_grad.reset()
         # agent.print_traj()
         plt.plot(plot_x, plot_y)
-        plt.savefig(os.path.join(save_path, f"plot.png"))
+        plt.savefig(os.path.join(save_dir, f"plot.png"))

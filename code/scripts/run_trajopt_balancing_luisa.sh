@@ -1,0 +1,1 @@
+python training/trajopt_balancing.py --l 0 --r 1 --iter 400 --tot_step 50 --lr 0.00001 --render_option LuisaScript
