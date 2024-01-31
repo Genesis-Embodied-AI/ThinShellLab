@@ -1,24 +1,11 @@
 import taichi as ti
-
-
-import time
-import numpy as np
-import torch
-import imageio
 import sys, os
 import json
-loader_dir = "../ext/AssetLoader"
+loader_dir = "../data/AssetLoader"
 sys.path.insert(0, os.path.join(os.getcwd(), loader_dir))
 
-import random
-from argparse import ArgumentParser
-import matplotlib.pyplot as plt
 from assets_lookup import texture_lookup, model_lookup, background_lookup
 from convert_luisa import *
-
-# from geometry import projection_query
-from agent.traj_opt_single import agent_trajopt
-import importlib
 
 env_dict = {
     "balancing": "",
@@ -94,11 +81,11 @@ cloth_presets = {
     "cloth_2": get_asset_cloth("fabric_pattern_07"),
     "genesis_paper": get_asset_cloth("genesis_logo"),
     "genesis_paper_curve": get_asset_cloth("genesis_logo", curve=True),
-    "poker_1": get_asset_cloth("poker_1", both_sides=True, thickness=0.0005),
-    "poker_2": get_asset_cloth("poker_2", both_sides=True, thickness=0.0005),
-    "poker_3": get_asset_cloth("poker_3", both_sides=True, thickness=0.0005),
-    "postcard_1": get_asset_cloth("postcard_1", both_sides=True, thickness=0.0005),
-    "postcard_2": get_asset_cloth("postcard_2", both_sides=True, thickness=0.0005),
+    "poker_1": get_asset_cloth("poker_1", both_sides=True),
+    "poker_2": get_asset_cloth("poker_2", both_sides=True),
+    "poker_3": get_asset_cloth("poker_3", both_sides=True),
+    "postcard_1": get_asset_cloth("postcard_1", both_sides=True),
+    "postcard_2": get_asset_cloth("postcard_2", both_sides=True),
     "paper_1": ClothOptions(
         texture=TextureOptions(color=(0.9, 0.9, 0.9)),
         roughness=TextureOptions(color=(0.9,)),

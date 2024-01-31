@@ -1,0 +1,3 @@
+[submodule "data/AssetLoader"]
+	path = data/AssetLoader
+	url = https://github.com/ACMLCZH/AssetLoader.git

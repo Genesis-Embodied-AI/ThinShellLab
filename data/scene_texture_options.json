@@ -5,7 +5,8 @@
             "rotation": 144
         },
         "clothes": [ {
-            "type": "poker_1"
+            "type": "poker_1", 
+            "thickness": 0.0005
         } ],
         "elastics": [ {
             "type": "pure_1"
@@ -32,11 +33,14 @@
             "look_at": [0, 0.02, 0]
         },
         "clothes": [ {
-            "type": "poker_1"
+            "type": "poker_1", 
+            "thickness": 0.0005
         }, {
-            "type": "poker_2"
+            "type": "poker_2", 
+            "thickness": 0.0005
         }, {
-            "type": "poker_3"
+            "type": "poker_3", 
+            "thickness": 0.0005
         } ],
         "elastics": [ {
             "type": "pure_1"
@@ -259,11 +263,14 @@
             "look_at": [-0.01, 0, 0]
         },
         "clothes": [ {
-            "type": "postcard_2"
+            "type": "postcard_2", 
+            "thickness": 0.0005
         }, {
-            "type": "postcard_1"
+            "type": "postcard_1", 
+            "thickness": 0.0005
         }, {
-            "type": "postcard_2"
+            "type": "postcard_2", 
+            "thickness": 0.0005
         } ],
         "elastics": [ {
             "type": "pure_1"
