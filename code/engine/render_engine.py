@@ -68,7 +68,7 @@ def get_asset_background(background_name, image_scale=1):
     texture_map = TextureOptions(
         image=os.path.join(loader_dir, background_lookup[background_name].texture),
         image_scale=image_scale,
-    ),
+    )
     return EnvironmentOptions(texture=texture_map)
         
     # texture=TextureOptions(
@@ -251,7 +251,7 @@ class LuisaScriptRender:
         self.light_options = [LightOptions(position=(2, 2, 2), color=(1, 1, 1))]
         self.camera_option = parse_setting(render_setting["camera"] if "camera" in render_setting else None, "camera")
         self.cloth_options = [parse_setting(cloth_setting, "cloth") for cloth_setting in render_setting["clothes"]]
-        self.elastic_options = [parse_setting(elastic_setting, "elastic") for elastic_setting in render_setting["elastic"]]
+        self.elastic_options = [parse_setting(elastic_setting, "elastic") for elastic_setting in render_setting["elastics"]]
         self.table_option = parse_setting(render_setting["table"], "table") if "table" in render_setting else None
         self.replace_first = self.table_option is not None and self.table_option.replace_first
 

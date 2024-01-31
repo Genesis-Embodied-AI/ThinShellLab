@@ -402,12 +402,7 @@ def get_mesh(
         clamp_normal=clamp_normal,
     )
 
-def process_curve_mix(
-    sys, # tmp_dir: str, scene_name: str, 
-    cloth_textures : List[ClothOptions],
-    # elastic_textures : List[ElasticOptions],
-    # replace_first : bool
-):
+def process_curve_mix(sys, cloth_textures : List[ClothOptions]):
     # colors = ti.Vector.field(3, dtype=float, shape=sys.tot_NV)
     # cloth_overwrite = list()
     # cloth_default = list()
@@ -423,27 +418,12 @@ def process_curve_mix(
             cloth_mix = get_mix_texture(n, m, curve_judge)
             # mix_path = os.path.join(tmp_dir, f"curve_{scene_name}_{i}.png")
             # cloth_mix.save(mix_path)
-            overwrite_texture = TextureOptions(
+            cloth_textures[i] = TextureOptions(
                 mix_top=cloth_texture.texture,
                 mix_bottom=TextureOptions(image=cloth_mix),
                 mix_factor=1.0,
                 mix_method="multiply"
             )
-        else:
-            overwrite_texture = None
-        # cloth_default.append(tuple(colors[cloth.offset]))
-        # cloth_overwrite.append(overwrite_texture)
-        cloth_texture[i] = overwrite_texture
-    
-    # elastic_default = list()
-    # elastic_start = 1 if replace_first else 0 
-    # for i, elastic_texture in enumerate(elastic_textures):
-    #     si = i + elastic_start
-    #     elastic = sys.elastics[si]
-    #     elastic_default.append(tuple(colors[elastic.offset]))
-
-    # return cloth_overwrite, cloth_default, elastic_default
-    # return cloth_overwrite # elastic_default
 
 def build_global_scene(
     frame_scripts : LuisaRenderScripts,
@@ -532,31 +512,16 @@ def build_global_scene(
                 # default_color=elastic_default[i],
         )
 
-    # if robot_option is not None:
-    #     frame_scripts.add_shared_surface(
-    #         name=f"mat_dexterous",
-    #         surface=get_surface(body_option=robot_option)
-    #     )
-
-# rigid_elastic = None
-
 def build_taichi_scene(
     sys,
     # tmp_dir: str, scene_name: str,
     frame: str, # prev_timestep: int, tot_timestep: int,
     frame_scripts: LuisaRenderScripts,
     cloth_textures: List[ClothOptions],
-    # cloth_default : List[tuple],
-    # cloth_overwrite : List[TextureOptions],
     elastic_textures: List[ElasticOptions],
     # elastic_default : List[tuple],
     replace_first: bool=False,
     camera_option: CameraOptions=None,
-    # robot_folder : str = None,
-    # robot_offset : tuple = None,
-    # robot_app_vel : tuple = None,
-    # export_tmp : bool = False,
-    # show_inter : bool = False,
     preview: bool=True,
 ):
     n_cloth = len(sys.cloths)
@@ -568,6 +533,8 @@ def build_taichi_scene(
     # frame_int = int(frame)
     # app_step = max(frame_int - tot_timestep, 0)
     script = frame_scripts.get_script(frame, create=True)
+
+    print("CCCCCC:", camera_option)
 
     if camera_option is not None:
         script.add_camera(name="view_port", camera=camera_option.to_luisa())

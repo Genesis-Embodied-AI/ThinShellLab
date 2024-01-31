@@ -329,7 +329,7 @@
             "replace": true
         }
     },
-    "balance": {
+    "balancing": {
         "environment": {
             "type": "indoor_2",
             "rotation": 144

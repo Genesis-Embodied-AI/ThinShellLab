@@ -84,14 +84,13 @@ for ww in range(args.l, args.r):
         save_dir = f"../imgs/traj_opt_balance_{ww}"
     renderer = Renderer(sys, "balancing", save_dir, option=args.render_option)
 
-    # sys.init_pos = [(random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.0006]
     if not os.path.exists(save_dir):
-        os.mkdir(save_dir)
+        os.makedirs(save_dir)
     print(f"Saving Path: {save_dir}")
 
     sys.reset()
     sys.mu_cloth_elastic[None] = 5.0
-    renderer.render(sys, "0")
+    renderer.render("0")
     # scene.set_camera(camera)
     # scene.ambient_light([0.8, 0.8, 0.8])
     # scene.point_light((2, 2, 2), (1, 1, 1))
@@ -139,7 +138,7 @@ for ww in range(args.l, args.r):
             sys.time_step(projection_query, frame)
             analy_grad.copy_pos(sys, frame)
             if render:
-                renderer.render(sys, str(frame))
+                renderer.render(str(frame))
                 # scene.set_camera(camera)
                 # scene.ambient_light([0.8, 0.8, 0.8])
                 # scene.point_light((2, 2, 2), (1, 1, 1))
@@ -177,14 +176,14 @@ for ww in range(args.l, args.r):
             np.save(os.path.join(save_dir, "best_traj.npy"), agent.traj.to_numpy())
         np.save(os.path.join(save_dir, "plot_data.npy"), np.array(plot_y))
 
-        if render:
-            frames = []
-            for j in range(1, tot_timestep):
-                filename = os.path.join(save_path, f"{j}.png")
-                frames.append(imageio.imread(filename))
+        # if render:
+        #     frames = []
+        #     for j in range(1, tot_timestep):
+        #         filename = os.path.join(save_dir, f"{j}.png")
+        #         frames.append(imageio.imread(filename))
 
-            gif_name = filename = os.path.join(save_path, f"GIF{i}.gif")
-            imageio.mimsave(gif_name, frames, 'GIF', duration=0.02)
+        #     gif_name = filename = os.path.join(save_dir, f"GIF{i}.gif")
+        #     imageio.mimsave(gif_name, frames, 'GIF', duration=0.02)
 
         if args.throwing:
             analy_grad.get_loss_throwing(sys)
