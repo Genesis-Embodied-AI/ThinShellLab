@@ -458,10 +458,12 @@ class LuisaRenderScript:
             self.images[path] = path
             return path
         index = len(self.images)
-        ext = os.path.splitext(path)[1]
-        new_path = os.path.join(self.texture_name, f"image_{index}{ext}")
         if path is None:
+            new_path = os.path.join(self.texture_name, f"image_{index}.png")
             path = new_path
+        else:
+            ext = os.path.splitext(path)[1]
+            new_path = os.path.join(self.texture_name, f"image_{index}{ext}")
         self.images[path] = new_path
         return new_path
     
@@ -607,10 +609,12 @@ class LuisaRenderScripts:
         if path in self.images:
             return self.images[path]
         index = len(self.images)
-        ext = os.path.splitext(path)[1]
-        new_path = os.path.join("textures_shared", f"image_{index}{ext}")
         if path is None:
+            new_path = os.path.join("textures_shared", f"image_{index}.png")
             path = new_path
+        else:
+            ext = os.path.splitext(path)[1]
+            new_path = os.path.join("textures_shared", f"image_{index}{ext}")
         self.images[path] = new_path
         return new_path
             

@@ -138,7 +138,7 @@ for ww in range(args.l, args.r):
             sys.time_step(projection_query, frame)
             analy_grad.copy_pos(sys, frame)
             if render:
-                renderer.render(str(frame))
+                renderer.render(str(frame), preview=True)
                 # scene.set_camera(camera)
                 # scene.ambient_light([0.8, 0.8, 0.8])
                 # scene.point_light((2, 2, 2), (1, 1, 1))
@@ -148,6 +148,9 @@ for ww in range(args.l, args.r):
                 # canvas.scene(scene)
                 # window.save_image(os.path.join(save_path, f"{frame}.png"))
 
+        if render:
+            renderer.end_rendering()
+            exit()
         if args.save:
             sys.save_all(state_path)
 
@@ -191,7 +194,6 @@ for ww in range(args.l, args.r):
             analy_grad.get_loss_balance(sys)
 
         for i in range(tot_timestep - 1, 0, -1):
-            # print("back prop step:", i)
             analy_grad.transfer_grad(i, sys, projection_query)
 
         analy_grad.apply_action_limit_grad(agent, 0.015)
