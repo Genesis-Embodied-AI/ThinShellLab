@@ -4,7 +4,6 @@ import time
 # from PIL import Image
 import numpy as np
 import torch
-import imageio
 import os
 from agent.traj_opt_single import agent_trajopt
 from optimizer.optim import Adam_single
@@ -21,6 +20,7 @@ parser.add_argument('--tot_step', type=int, default=5)
 parser.add_argument('--load_traj', type=str, default=None)
 parser.add_argument('--render', type=int, default=10)
 parser.add_argument('--max_dist', type=float, default=0.001)
+parser.add_argument('--render_option', type=str, default="Taichi")
 args = parser.parse_args()
 
 ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32, fast_math=False,
@@ -29,6 +29,7 @@ ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32
 
 from Scene_pick import Scene, Body
 from geometry import projection_query
+from engine.render_engine import Renderer
 import linalg
 from analytic_grad_single import Grad
 
@@ -48,38 +49,19 @@ sys.cloths[0].Kb[None] = 200.0
 analy_grad = Grad(sys, tot_timestep, sys.elastic_cnt - 1)
 adam = Adam_single((tot_timestep, sys.elastic_cnt - 1, 6), args.lr, 0.9, 0.9999, 1e-8)
 agent = agent_trajopt(tot_timestep, sys.elastic_cnt - 1, max_moving_dist=args.max_dist)
-
-colors = ti.Vector.field(3, dtype=float, shape=sys.tot_NV)
-
 sys.init_all()
-sys.get_colors(colors)
 analy_grad.init_mass(sys)
-
-window = ti.ui.Window('surface test', res=(800, 800), vsync=True, show_window=False)
-canvas = window.get_canvas()
-canvas.set_background_color((0.5, 0.5, 0.5))
-scene = ti.ui.Scene()
-camera = ti.ui.Camera()
-camera.position(-0.2, 0.2, 0.05)
-camera.lookat(0, 0, 0)
-camera.up(0, 0, 1)
+renderer = Renderer(sys, "pick", option=args.render_option)
 
 now_reward = -100000
 for ww in range(args.l, args.r):
     save_path = f"../imgs/traj_opt_pick_fold_{ww}"
     # sys.init_pos = [(random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.002, (random.random() - 0.5) * 0.0006]
-    if not os.path.exists(save_path):
-        os.mkdir(save_path)
+    renderer.set_save_dir(save_path)
     print(f"Saving Path: {save_path}")
 
     sys.reset()
     sys.mu_cloth_elastic[None] = 10.0
-    scene.set_camera(camera)
-    scene.ambient_light([0.8, 0.8, 0.8])
-    scene.point_light((2, 2, 2), (1, 1, 1))
-    scene.mesh(sys.x32, indices=sys.f_vis, per_vertex_color=colors)  # , index_offset=(nf//2)*3, index_count=(nf//2)*3)
-    canvas.scene(scene)
-    window.save_image(os.path.join(save_path, f"0.png"))
     plot_x = []
     plot_y = []
     if args.load_traj is not None:
@@ -100,6 +82,8 @@ for ww in range(args.l, args.r):
         obs_list = []
         action_list = []
         start_time = time.time()
+        if render:
+            renderer.render("0")
         for frame in range(1, tot_timestep):
             # print("frame:", frame)
             agent.get_action(frame)
@@ -111,14 +95,8 @@ for ww in range(args.l, args.r):
             sys.time_step(projection_query, frame)
             analy_grad.copy_pos(sys, frame)
             if render:
-                scene.set_camera(camera)
-                scene.ambient_light([0.8, 0.8, 0.8])
-                scene.point_light((2, 2, 2), (1, 1, 1))
-                # sys.cloths[0].update_visual()
-                scene.mesh(sys.x32, indices=sys.f_vis,
-                           per_vertex_color=colors)  # , index_offset=(nf//2)*3, index_count=(nf//2)*3)
-                canvas.scene(scene)
-                window.save_image(os.path.join(save_path, f"{frame}.png"))
+                renderer.render(str(frame))
+
         end_time = time.time()
         print("tot_time:", end_time - start_time)
         tot_reward = sys.compute_reward_pick_fold()
@@ -140,14 +118,8 @@ for ww in range(args.l, args.r):
             now_reward = tot_reward
             np.save(os.path.join(save_path, "best_traj.npy"), agent.traj.to_numpy())
         np.save(os.path.join(save_path, "plot_data.npy"), np.array(plot_y))
-        frames = []
         if render:
-            for j in range(tot_timestep):
-                filename = os.path.join(save_path, f"{j}.png")
-                frames.append(imageio.imread(filename))
-
-            gif_name = os.path.join(save_path, f"GIF{i}.gif")
-            imageio.mimsave(gif_name, frames, 'GIF', duration=0.02)
+            renderer.end_rendering(i)
 
         analy_grad.get_loss_pick_fold(sys)
 

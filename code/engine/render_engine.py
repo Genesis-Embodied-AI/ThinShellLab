@@ -1,33 +1,21 @@
 import taichi as ti
-import sys, os
+import os
 import json
-loader_dir = "../data/AssetLoader"
-sys.path.insert(0, os.path.join(os.getcwd(), loader_dir))
+import imageio
 
 from assets_lookup import texture_lookup, model_lookup, background_lookup
 from convert_luisa import *
-
-env_dict = {
-    "balancing": "",
-    "bouncing": "",
-    "card": "",
-    "folding": "",
-    "forming": "",
-    "interact": "",
-    "lifting": "",
-    "pick": "",
-    "sliding": "",
-}
+loader_dir = "../data/AssetLoader"
 
 def get_asset_maps(option, texture_scale, roughness):
     texture_map = TextureOptions(
-        image=os.path.join(loader_dir, option.texture), image_scale=texture_scale
+        file=os.path.join(loader_dir, option.texture), image_scale=texture_scale
     )
     roughness_map = roughness if roughness is not None else \
         None if option.roughness is None else \
-        TextureOptions(image=os.path.join(loader_dir, option.roughness))
+        TextureOptions(file=os.path.join(loader_dir, option.roughness))
     normal_map = None if option.normal is None else \
-        TextureOptions(image=os.path.join(loader_dir, option.normal))
+        TextureOptions(file=os.path.join(loader_dir, option.normal))
     return texture_map, roughness_map, normal_map
 
 def get_asset_texture(texture_name, texture_scale=1, roughness=None):
@@ -42,13 +30,12 @@ def get_asset_model(model_name, texture_scale=1, roughness=None):
     return texture_map, roughness_map, normal_map, model_file
 
 def get_asset_cloth(
-    texture_name, image_scale=1, roughness=None,
-    both_sides=False, curve=False, # thickness=None,
+    texture_name, image_scale=1, roughness=None, both_sides=False, curve=False,
 ):
     texture_map, roughness_map, normal_map = get_asset_texture(texture_name, image_scale, roughness)
     return ClothOptions(
         texture=texture_map, roughness=roughness_map, normal=normal_map,
-        both_sides=both_sides, curve=curve, # thickness=thickness
+        both_sides=both_sides, curve=curve,
     )
 
 def get_asset_elastic(texture_name, image_scale=1, roughness=None):
@@ -66,15 +53,10 @@ def get_asset_table(model_name, image_scale=1, roughness=None, clamp_normal=-1):
 
 def get_asset_background(background_name, image_scale=1):
     texture_map = TextureOptions(
-        image=os.path.join(loader_dir, background_lookup[background_name].texture),
+        file=os.path.join(loader_dir, background_lookup[background_name].texture),
         image_scale=image_scale,
     )
     return EnvironmentOptions(texture=texture_map)
-        
-    # texture=TextureOptions(
-    #     image=os.path.join(loader_dir, background_lookup["lebombo"].texture),
-    #     image_scale=0.8,
-    # ),
 
 cloth_presets = {
     "cloth_1": get_asset_cloth("fabric_pattern_05"),
@@ -133,26 +115,10 @@ def parse_setting(preset_setting, setting_type):
         cloth_preset = cloth_presets[preset_setting["type"]]
         if "thickness" in preset_setting:
             cloth_preset.thickness = float(preset_setting["thickness"])
-        # if render_gif and "app_vel" in preset_setting:
-        #     cloth_preset.app_vel = tuple(preset_setting["app_vel"])
         return cloth_preset
 
     elif setting_type == "elastic":
         elastic_preset = elastic_presets[preset_setting["type"]]
-        # if "lower" in preset_setting:
-        #     elastic_preset.lower = float(preset_setting["lower"])
-        # if not render_gif and "target" in preset_setting:
-        #     elastic_preset.target = preset_setting["target"]
-        # if render_gif and "shared_target" in preset_setting:
-        #     shared_target = preset_setting["shared_target"]
-        #     elastic_preset.target = { shared_target: [
-        #         [str(i) for i in range(1, int(shared_target))],
-        #         preset_setting["target"][shared_target][1]
-        #     ]}
-        # if render_gif and "app_vel" in preset_setting:
-        #     elastic_preset.app_vel = tuple(preset_setting["app_vel"])
-        # if "rigid" in preset_setting:
-        #     elastic_preset.rigid = preset_setting["rigid"]
         return elastic_preset
     
     elif setting_type == "table":
@@ -183,15 +149,12 @@ def parse_setting(preset_setting, setting_type):
         raise Exception("Invalid setting type.")
     
 class TaichiRender:
-    def __init__(self, scene_sys, env_name, save_dir=None, res=(800, 800), show_window=False,
+    def __init__(self, scene_sys, env_name, res=(800, 800), show_window=False,
                  background_color=(0.5, 0.5, 0.5), cam_pos=(-0.2, 0.2, 0.05), cam_lookat=(0, 0, 0)):
         self.scene_sys = scene_sys
         self.env_name = env_name
         self.window = ti.ui.Window(env_name, res=res, vsync=True, show_window=show_window)
         self.show_window = show_window
-        self.save_dir = save_dir
-        if self.save_dir is not None:
-            os.makedirs(self.save_dir, exist_ok=True)
         self.canvas = self.window.get_canvas()
         self.canvas.set_background_color(background_color)
         self.scene = ti.ui.Scene()
@@ -206,7 +169,13 @@ class TaichiRender:
 
         self.vertex_colors = ti.Vector.field(3, dtype=float, shape=self.scene_sys.tot_NV)
         self.scene_sys.get_colors(self.vertex_colors)
+        self.frames = list()
+        self.save_dir = None
     
+    def set_save_dir(self, save_dir):
+        self.save_dir = save_dir
+        os.makedirs(self.save_dir, exist_ok=True)
+
     def render(self, frame: str):
         self.scene.mesh(
             self.scene_sys.x32, indices=self.scene_sys.f_vis,
@@ -214,16 +183,21 @@ class TaichiRender:
         )
         self.canvas.scene(self.scene)
         if self.save_dir is not None:
-            self.window.save_image(os.path.join(self.save_dir, f'{frame}.png'))
+            image_path = os.path.join(self.save_dir, f'{frame}.png')
+            self.window.save_image(image_path)
+            self.frames.append(imageio.imread(image_path))
         if self.show_window:
             self.window.show()
+    
+    def end_rendering(self, iter):
+        gif_name = os.path.join(self.save_dir, f"GIF{iter}.gif")
+        imageio.mimsave(gif_name, self.frames, 'GIF', duration=0.02)
+        self.frames.clear()
 
 class LuisaScriptRender:
-    def __init__(self, scene_sys, env_name, save_dir, config_path="../data/scene_texture_options.json"):
+    def __init__(self, scene_sys, env_name, config_path="../data/scene_texture_options.json"):
         self.scene_sys = scene_sys
         self.env_name = env_name
-        self.save_dir = save_dir
-
         render_dict = json.load(open(config_path, "r"))
         if self.env_name not in render_dict:
             raise Exception("Invalid environment name.")
@@ -231,7 +205,6 @@ class LuisaScriptRender:
         self.parse_options(self.render_setting)
 
         self.scripts = LuisaRenderScripts(
-            script_dir=self.save_dir,
             integrator="wavepath_v2",
             sampler="pmj02bn",
             spectrum="hero",
@@ -245,6 +218,9 @@ class LuisaScriptRender:
             environment_option=self.environment_option,
             table_option=self.table_option,
         )
+
+    def set_save_dir(self, save_dir):
+        self.scripts.set_script_dir(save_dir)
 
     def parse_options(self, render_setting):
         self.environment_option = parse_setting(render_setting["environment"], "environment")
@@ -263,21 +239,22 @@ class LuisaScriptRender:
             preview=preview
         )
 
-    def end_rendering(self):
+    def end_rendering(self, iter):
         self.scripts.export_scripts()
+        self.scripts.clear_scripts()
 
 class Renderer:
-    def __init__(self, scene_sys, env_name, save_dir, option="Taichi", config_path=None):
+    def __init__(self, scene_sys, env_name, option="Taichi", config_path=None):
         if option not in ["Taichi", "LuisaScript"]:
             raise Exception("Invalid renderer.")
         self.option = option
         if self.option == "Taichi":
             if config_path is None:
-                self.renderer = TaichiRender(scene_sys, env_name, save_dir)
+                self.renderer = TaichiRender(scene_sys, env_name)
             else:
                 taichi_dict = json.load(open(config_path, "r"))
                 self.renderer = TaichiRender(
-                    scene_sys, env_name, save_dir,
+                    scene_sys, env_name,
                     res=tuple(taichi_dict["resolution"]),
                     show_window=bool(taichi_dict["show_window"]),
                     background_color=tuple(taichi_dict["background_color"]),
@@ -286,9 +263,12 @@ class Renderer:
                 )
         else:
             if config_path is None:
-                self.renderer = LuisaScriptRender(scene_sys, env_name, save_dir)
+                self.renderer = LuisaScriptRender(scene_sys, env_name)
             else:
-                self.renderer = LuisaScriptRender(scene_sys, env_name, save_dir, config_path)
+                self.renderer = LuisaScriptRender(scene_sys, env_name, config_path)
+
+    def set_save_dir(self, save_dir):
+        self.renderer.set_save_dir(save_dir)
 
     def render(self, frame: str, script_camera: CameraOptions=None, preview: bool=False):
         if self.option == "Taichi":
@@ -296,6 +276,5 @@ class Renderer:
         else:
             self.renderer.render(frame, script_camera, preview)
 
-    def end_rendering(self):
-        if self.option == "LuisaScript":
-            self.renderer.end_rendering()
+    def end_rendering(self, iter):
+        self.renderer.end_rendering(iter)

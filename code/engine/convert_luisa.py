@@ -1,4 +1,3 @@
-import os
 import trimesh
 import taichi as ti
 from queue import Queue
@@ -23,10 +22,10 @@ class ThinShellRenderOptions:
 class TextureOptions(ThinShellRenderOptions):
     def __init__(
         self,
-        color         : tuple = None,
-        file          : str = None,
-        image         : Image = None,
-        image_scale   : float = 1.0,
+        color         : tuple   = None,
+        file          : str     = None,
+        image         : Image   = None,
+        image_scale   : float   = 1.0,
         checker_on    : "TextureOptions" = None,
         checker_off   : "TextureOptions" = None,
         checker_scale : float            = None,
@@ -99,11 +98,9 @@ class EnvironmentOptions(ThinShellRenderOptions):
         self,
         texture  : TextureOptions = TextureOptions(color=(1.0, 1.0, 1.0)),
         rotation : float = 0,
-        # quat    : tuple = (0, 0, 0, 1),   # Here quat is xyzw format
     ):
         self.texture = texture
         self.rotation = rotation
-        # self.quat = quat
 
 class BodyOptions(ThinShellRenderOptions):
     def __init__(
@@ -123,10 +120,6 @@ class BodyOptions(ThinShellRenderOptions):
         self.clamp_normal = clamp_normal
     
     def to_luisa(self, target_opacity: float=None):
-        # assert body_option.texture is not None, "Body render option could not be None!"
-        # roughness_map = None if body_option.roughness is None else body_option.roughness.to_luisa()
-        # normal_map = None if body_option.normal is None else body_option.normal.to_luisa()
-        
         return LuisaSurface(
             material="plastic",
             roughness=self.get_luisa("roughness"),
@@ -136,13 +129,6 @@ class BodyOptions(ThinShellRenderOptions):
             kd=self.get_luisa("texture"),
             eta=self.get_luisa("eta"),
         )
-
-# def get_surface(
-#     body_option: BodyOptions,
-#     # default_color: tuple = (1.0, 1.0, 1.0),
-#     # overwrite_texture: TextureOptions = None,
-#     : float = None,
-# ):
 
 class ClothOptions(BodyOptions):
     def __init__(
@@ -299,9 +285,6 @@ def build_elastic_mesh(elastic, offset):
             if face[0] in cube_dict and face[1] in cube_dict and face[2] in cube_dict:
                 cube_faces[i].append([cube_dict[face[0]], cube_dict[face[1]], cube_dict[face[2]]])
                 break
-    
-    # for i in range(6):
-    #     print(f"{i} faces: {len(cube_faces[i])}")
 
     tot_verts = 0
     for i in range(6):
@@ -312,9 +295,6 @@ def build_elastic_mesh(elastic, offset):
             cube_corner_uvs[i][0], cube_corner_uvs[i][1]
         )
 
-        # print(i, cur_uvs)
-        # cur_mesh = trimesh.Trimesh(vertices=cur_vertices, faces=cur_faces)
-        # cur_normals = cur_mesh.vertex_normals
         cube_vertices[i] = cur_vertices
         cube_faces[i] = cur_faces + tot_verts
         cube_uvs[i] = cur_uvs
@@ -403,9 +383,6 @@ def get_mesh(
     )
 
 def process_curve_mix(sys, cloth_textures : List[ClothOptions]):
-    # colors = ti.Vector.field(3, dtype=float, shape=sys.tot_NV)
-    # cloth_overwrite = list()
-    # cloth_default = list()
     for i, cloth_texture in enumerate(cloth_textures):
         cloth = sys.cloths[i]
         if cloth_texture.curve:
@@ -416,8 +393,6 @@ def process_curve_mix(sys, cloth_textures : List[ClothOptions]):
             n = cloth.N
             m = cloth.M if hasattr(cloth, "M") else n
             cloth_mix = get_mix_texture(n, m, curve_judge)
-            # mix_path = os.path.join(tmp_dir, f"curve_{scene_name}_{i}.png")
-            # cloth_mix.save(mix_path)
             cloth_textures[i] = TextureOptions(
                 mix_top=cloth_texture.texture,
                 mix_bottom=TextureOptions(image=cloth_mix),
@@ -429,15 +404,11 @@ def build_global_scene(
     frame_scripts : LuisaRenderScripts,
     camera_option : CameraOptions,
     cloth_textures : List[ClothOptions],
-    # cloth_default : List[tuple],
-    # cloth_overwrite : List[TextureOptions],
     elastic_textures : List[ElasticOptions],
-    # elastic_default : List[tuple],
     light_options : List[LightOptions] = [],
     environment_option : EnvironmentOptions = None,
     table_option : TableOptions = None,
     ground_option : GroundOptions = None,
-    # robot_option : ElasticOptions = None,
 ):
     # Add camera
     frame_scripts.add_shared_camera(name="view_port", camera=camera_option.to_luisa())
@@ -498,9 +469,6 @@ def build_global_scene(
         frame_scripts.add_shared_surface(
             name=f"mat_cloth_{i}",
             surface=cloth_texture.to_luisa(),
-                # default_color=cloth_default[i],
-                # overwrite_texture=cloth_overwrite[i],
-            # ),
         )
     
     # Add elastic texture
@@ -509,17 +477,14 @@ def build_global_scene(
         frame_scripts.add_shared_surface(
             name=f"mat_elastic_{si}",
             surface=elastic_texture.to_luisa()
-                # default_color=elastic_default[i],
         )
 
 def build_taichi_scene(
     sys,
-    # tmp_dir: str, scene_name: str,
-    frame: str, # prev_timestep: int, tot_timestep: int,
+    frame: str,
     frame_scripts: LuisaRenderScripts,
     cloth_textures: List[ClothOptions],
     elastic_textures: List[ElasticOptions],
-    # elastic_default : List[tuple],
     replace_first: bool=False,
     camera_option: CameraOptions=None,
     preview: bool=True,
@@ -530,21 +495,13 @@ def build_taichi_scene(
     if len(cloth_textures) != n_cloth or len(elastic_textures) + elastic_start != n_elastic:
         raise Exception("Texture numbers and entity numbers do not match!")
     
-    # frame_int = int(frame)
-    # app_step = max(frame_int - tot_timestep, 0)
     script = frame_scripts.get_script(frame, create=True)
-
-    print("CCCCCC:", camera_option)
 
     if camera_option is not None:
         script.add_camera(name="view_port", camera=camera_option.to_luisa())
 
     for i, cloth_texture in enumerate(cloth_textures):
-        # if cloth_texture.freeze_frame is not None and frame_int < cloth_texture.freeze_frame:
-        #     continue
         cloth_offset = np.array([0.0, 0.0, 0.0])
-        # if cloth_texture.app_vel is not None:
-        #     cloth_offset += np.array(cloth_texture.app_vel) * app_step
         cloth_mesh = build_cloth_mesh(
             sys.cloths[i], cloth_texture.both_sides,
             cloth_texture.thickness, cloth_offset,
@@ -558,45 +515,6 @@ def build_taichi_scene(
             ),
         )
 
-        # if cloth_texture.freeze_frame == int(frame):
-        #     for add_frame in frame_scripts.scripts:
-        #         if int(add_frame) < int(frame):
-        #             target_script = frame_scripts.scripts[add_frame]
-        #             target_script.add_mesh(
-        #                 name=f"cloth_{i}",
-        #                 mesh=get_mesh(
-        #                     body_mesh=cloth_mesh,
-        #                     mat_name=f"mat_cloth_{i}",
-        #                     clamp_normal=cloth_texture.clamp_normal,
-        #                 )
-        #             )
-
-        # if cloth_texture.target is not None and frame in cloth_texture.target:
-        #     add_frames, add_opacity = cloth_texture.target[frame]
-        #     for add_frame in add_frames:
-        #         target_script = frame_scripts.get_script(add_frame)
-                
-        #         target_script.add_surface(
-        #             name=f"mat_cloth_{i}_target_{frame}_{add_frame}",
-        #             surface=cloth_texture.to_luisa(target_opacity=add_opacity,),
-        #         )
-        #         target_script.add_mesh(
-        #             name=f"cloth_{i}_target_{frame}_{add_frame}",
-        #             mesh=get_mesh(
-        #                 body_mesh=cloth_mesh,
-        #                 mat_name=f"mat_cloth_{i}_target_{frame}_{add_frame}",
-        #                 clamp_normal=cloth_texture.clamp_normal,
-        #             )
-        #         )
-
-        # if export_tmp:
-        #     cloth_mesh.export(os.path.join(tmp_dir, f"cloth_{scene_name}_{frame}_{i}.obj"))
-        #     if show_inter:
-        #         for j, items in enumerate(inter_result):
-        #             mesh, corners = items
-        #             print("Corners:", corners)
-        #             mesh.export(os.path.join(tmp_dir, f"cloth_{scene_name}_{frame}_{i}_{j}.obj"))
-    
     # Load robot
     # if robot_folder is not None:
     #     frame_int = int(frame)
@@ -634,24 +552,9 @@ def build_taichi_scene(
     for i, elastic_texture in enumerate(elastic_textures):
         si = i + elastic_start
         elastic_offset = np.array([0.0, 0.0, 0.0])
-        # if elastic_texture.lower is None else -elastic_texture.lower
-        # if elastic_texture.app_vel is not None:
-        #     elastic_offset += np.array(cloth_texture.app_vel) * app_step
         elastic_obj = sys.elastics[si]
-        # if hasattr(elastic_obj, "ratio") and robot_folder is not None:
-        #     continue
         elastic_mesh = build_elastic_mesh(elastic_obj, elastic_offset)
 
-        # global rigid_elastic
-        # print(elastic_texture.rigid)
-        # if elastic_texture.rigid:
-        #     if rigid_elastic is None:
-        #         rigid_elastic = elastic_mesh
-        #     rigid_offset = elastic_mesh.vertices[0] - rigid_elastic.vertices[0]
-        #     print("Offset:", rigid_offset)
-        #     elastic_mesh = rigid_elastic.copy()
-        #     elastic_mesh.vertices = elastic_mesh.vertices + rigid_offset
-        
         script.add_mesh(
             name=f"elastic_{si}",
             mesh=get_mesh(
@@ -660,27 +563,6 @@ def build_taichi_scene(
                 clamp_normal=elastic_texture.clamp_normal,
             )
         )
-
-        # if elastic_texture.target is not None and frame in elastic_texture.target:
-        #     add_frames, add_opacity = elastic_texture.target[frame]
-        #     for add_frame in add_frames:
-        #         target_script = frame_scripts.scripts[add_frame]
-
-        #         target_script.add_surface(
-        #             name=f"mat_elastic_{si}_target_{frame}_{add_frame}",
-        #             surface=elastic_texture.to_luisa(target_opacity=add_opacity),
-        #         )
-        #         target_script.add_mesh(
-        #             name=f"elastic_{si}_target_{frame}_{add_frame}",
-        #             mesh=get_mesh(
-        #                 body_mesh=elastic_mesh,
-        #                 mat_name=f"mat_elastic_{si}_target_{frame}_{add_frame}",
-        #                 clamp_normal=elastic_texture.clamp_normal,
-        #             )
-        #         )
-
-        # if export_tmp:
-        #     elastic_mesh.export(os.path.join(tmp_dir, f"elastic_{scene_name}_{frame}_{i}.obj"))
     
     if preview:
         frame_scripts.export_scripts()

@@ -162,7 +162,7 @@ class LuisaTexture(LuisaOption):
             shared_option.image.save(image_file)
             shared_option.image = None
         elif shared_option.check_attr(["file"]):
-            shared_option.file = scripts.add_global_obj(shared_option.file)
+            shared_option.file = scripts.add_global_image(shared_option.file)
             shared_option.file_shared = True
         return shared_option
     
@@ -448,9 +448,7 @@ class LuisaRenderScript:
         if name not in self.cameras or replace:
             self.cameras[name] = camera
 
-    # def add_global_image(self, image_path: str=None, image_object: Image=None, shared: bool=False):
     def add_global_image(self, path: str=None, shared: bool=False):
-        # if path is not None:
         if path in self.images:
             return self.images[path]
         if shared:
@@ -546,8 +544,7 @@ class LuisaRenderScript:
 class LuisaRenderScripts:
     def __init__(
         self,
-        script_dir   : str,
-        # marks        : list  = [],
+        script_dir   : str   = None,
         integrator   : str   = "wavepath_v2",
         sampler      : str   = "pmj02bn",
         spectrum     : str   = "hero",
@@ -566,13 +563,6 @@ class LuisaRenderScripts:
         self.sampler = sampler
         self.spectrum = spectrum
         self.clamp_normal = clamp_normal
-        # if len(marks) == 0:
-        #     raise Exception("No scripts!")
-        # self.scripts = {
-        #     mark: LuisaRenderScript(
-        #         script_dir, mark, integrator, sampler, spectrum, clamp_normal
-        #     ) for mark in marks
-        # }
 
         self.environment = None
         self.meshes = dict()
@@ -592,6 +582,12 @@ class LuisaRenderScripts:
             else:
                 raise Exception(f"No script named {mark}.")
         return self.scripts[mark]
+
+    def clear_scripts(self):
+        self.scripts.clear()
+
+    def set_script_dir(self, script_dir):
+        self.script_dir = script_dir
 
     def add_shared_environment(self, environment: LuisaEnvironment):
         self.environment = environment
