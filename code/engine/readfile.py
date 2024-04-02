@@ -4,8 +4,6 @@ def read_node(filename="../data/tactile.node"):
     contents2 = file.readline()
     array = contents2.split(' ')
     tot_cnt = int(array[0])
-    # print(contents2)
-    # # 利用循环全部读出
     positions = []
     maxx = 0.0
     for i in range(tot_cnt):
@@ -14,8 +12,6 @@ def read_node(filename="../data/tactile.node"):
         positions.append(array[1:])
         maxx = max(array[3], maxx)
     file.close()
-    # print(maxx)
-    # print("tot nodes: ", tot_cnt)
     return tot_cnt, positions
 
 def read_smesh(filename="../data/tactile.face"):

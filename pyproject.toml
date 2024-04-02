@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "thinshelllab"
+version = "0.1.0"
+description = "A differentiable simulation platform for thin-shell object manipulation"
+readme = "Readme.md"
+requires-python = ">=3.9"
+dependencies = [
+    "cma",
+    "cupy",
+    "gymnasium",
+    "h5py",
+    "imageio",
+    "matplotlib",
+    "numpy",
+    "open3d",
+    "opencv_python",
+    "Pillow",
+    "sb3_contrib",
+    "stable_baselines3",
+    "taichi",
+    "torch",
+    "trimesh"
+]
+
+# TODO: paths

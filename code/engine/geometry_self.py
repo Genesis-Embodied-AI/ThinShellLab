@@ -3,8 +3,6 @@ import taichi as ti
 import taichi.math as tm
 import matplotlib.pyplot as plt
 
-from Scene import Scene
-
 vec3 = ti.types.vector(3, ti.f64)
 
 grid_h = 0.1
@@ -289,7 +287,7 @@ def project_pair(sys:ti.template(), start: ti.i32, end: ti.i32, body_idx:ti.i32,
         sys.proj_idx[body_idx, i] = proj_idx
         sys.proj_w[body_idx, i] = proj_w
 
-def projection_query(sys:Scene, debug=False, self_contact=[]):
+def projection_query(sys, debug=False, self_contact=[]):
     # proj_num[None] = 0
     for body_idx, body in enumerate(sys.body_list):
         p2g(sys.pos, sys.faces, body.f_start, body.f_end)

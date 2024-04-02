@@ -1,6 +1,6 @@
 import taichi as ti
 
-from model_fold_offset_new import Cloth
+from model_fold_offset import Cloth
 from model_elastic_offset import Elastic
 from model_elastic_tactile import Elastic as tactile
 

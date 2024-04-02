@@ -12,7 +12,6 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import linalg
-from gripper import gripper
 
 from sparse_solver import SparseMatrix
 from BaseScene import BaseScene

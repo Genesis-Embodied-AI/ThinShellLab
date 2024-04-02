@@ -26,7 +26,7 @@ ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32
         offline_cache=True, offline_cache_max_size_of_files=1024 ** 3,
         offline_cache_cleaning_policy='version')
 
-from Scene_table import Scene, Body
+from Scene_bouncing import Scene, Body
 from geometry import projection_query
 from engine.render_engine import Renderer
 import linalg

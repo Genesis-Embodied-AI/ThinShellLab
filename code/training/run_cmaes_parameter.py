@@ -22,7 +22,7 @@ parser.add_argument('--traj', type=str, default="")
 parser.add_argument('--Kb', type=float, default=100.0)
 parser.add_argument('--max_dist', type=float, default=0.002)
 parser.add_argument('--mu', type=float, default=1.0)
-parser.add_argument('--mu_cloth', type=float, default=1.0) \
+parser.add_argument('--mu_cloth', type=float, default=1.0)
 args = parser.parse_args()
 
 ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32, fast_math=False,
