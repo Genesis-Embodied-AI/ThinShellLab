@@ -4,8 +4,8 @@ from queue import Queue
 from PIL import Image
 from typing import List
 
-import convert_piece
-from build_luisa_script import *
+from . import convert_piece
+from .build_luisa_script import *
 from assets_lookup import cube_corner_uvs
 
 class ThinShellRenderOptions:

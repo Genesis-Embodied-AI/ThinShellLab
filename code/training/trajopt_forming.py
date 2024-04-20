@@ -5,8 +5,8 @@ import time
 import numpy as np
 import torch
 import os
-from agent.traj_opt_single import agent_trajopt
-from optimizer.optim import Adam_single
+from thinshelllab.agent.traj_opt_single import agent_trajopt
+from thinshelllab.optimizer.optim import Adam_single
 import random
 from argparse import ArgumentParser
 import matplotlib.pyplot as plt
@@ -25,12 +25,12 @@ ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32
         offline_cache=True, offline_cache_max_size_of_files=1024 ** 3,
         offline_cache_cleaning_policy='version')
 
-from Scene_forming import Scene, Body
-from geometry import projection_query
-from engine.render_engine import Renderer
-import linalg
-import readfile
-from analytic_grad_single import Grad
+from thinshelllab.task_scene.Scene_forming import Scene, Body
+from thinshelllab.engine.geometry import projection_query
+from thinshelllab.engine.render_engine import Renderer
+from thinshelllab.engine import linalg
+from thinshelllab.engine import readfile
+from thinshelllab.engine.analytic_grad_single import Grad
 
 M = 2
 N = 16

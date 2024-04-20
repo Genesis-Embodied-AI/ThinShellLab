@@ -15,11 +15,11 @@ import os
 import taichi as ti
 
 from matplotlib import pyplot as plt
-from geometry import projection_query
+from thinshelllab.engine.geometry import projection_query
 import importlib
 
 ##################################################################
-# init taichi env & use implemented Contact class
+# init taichi env & use impl/imporemented Contact class
 ##################################################################
 # if trained on servers, off_screen = True, otherwise False
 off_screen = True
@@ -58,7 +58,7 @@ class Env(gym.Env):
     def __init__(self, sys_name, time_step, reward_name=None, load_dir=None, task_name=None, Kb=100.0, mu=5.0, model="PPO"):
         super().__init__()
         importlib.invalidate_caches()
-        Scene = importlib.import_module(f'Scene_{sys_name}')
+        Scene = importlib.import_module(f'thinshelllab.task_scene.Scene_{sys_name}')
 
         cloth_size = 0.06
         self.model = model

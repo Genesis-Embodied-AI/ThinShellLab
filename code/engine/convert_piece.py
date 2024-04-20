@@ -1,7 +1,7 @@
 import numpy as np
 import trimesh
 
-import readfile
+from . import readfile
 
 def comp(x, y):
     if x > y:

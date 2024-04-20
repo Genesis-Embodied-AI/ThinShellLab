@@ -3,9 +3,9 @@ import argparse
 import numpy as np
 
 import taichi as ti
-from sparse_solver import SparseMatrix
-import readfile
-from linalg import SPD_Projector
+from .sparse_solver import SparseMatrix
+from . import readfile
+from .linalg import SPD_Projector
 import matplotlib.pyplot as plt
 
 @ti.data_oriented

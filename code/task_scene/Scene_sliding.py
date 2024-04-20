@@ -3,7 +3,7 @@ import taichi as ti
 import taichi as ti
 from dataclasses import dataclass
 import numpy as np
-from BaseScene import BaseScene
+from ..engine.BaseScene import BaseScene
 
 vec3 = ti.types.vector(3, ti.f64)
 vec3i = ti.types.vector(3, ti.i32)

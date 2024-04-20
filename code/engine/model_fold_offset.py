@@ -3,8 +3,8 @@ import argparse
 import numpy as np
 
 import taichi as ti
-from sparse_solver import SparseMatrix
-import linalg
+from .sparse_solver import SparseMatrix
+from . import linalg
 
 @ti.data_oriented
 class Cloth:

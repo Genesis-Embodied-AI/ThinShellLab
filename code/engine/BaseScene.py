@@ -1,6 +1,6 @@
-from model_fold_offset import Cloth
-from model_elastic_tactile import Elastic as tactile
-from model_elastic_offset import Elastic
+from .model_fold_offset import Cloth
+from .model_elastic_tactile import Elastic as tactile
+from .model_elastic_offset import Elastic
 
 from typing import List
 import taichi as ti
@@ -8,13 +8,13 @@ import torch
 from dataclasses import dataclass
 import numpy as np
 import matplotlib.pyplot as plt
-import linalg
-import contact_diff
-from gripper_tactile import gripper
-import gripper_single
+from . import linalg
+from . import contact_diff
+from .gripper_tactile import gripper
+from . import gripper_single
 import random
 
-from sparse_solver import SparseMatrix
+from .sparse_solver import SparseMatrix
 
 vec3 = ti.types.vector(3, ti.f64)
 vec3i = ti.types.vector(3, ti.i32)

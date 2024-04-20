@@ -29,17 +29,17 @@ ti.init(ti.cpu, device_memory_fraction=0.5, default_fp=ti.f64, default_ip=ti.i32
         offline_cache=True, offline_cache_max_size_of_files=1024 ** 3,
         offline_cache_cleaning_policy='version')
 
-from geometry import projection_query
-import linalg
-from analytic_grad_single import Grad
-from agent.traj_opt_single import agent_trajopt
+from thinshelllab.engine.geometry import projection_query
+from thinshelllab.engine import linalg
+from thinshelllab.engine.analytic_grad_single import Grad
+from thinshelllab.agent.traj_opt_single import agent_trajopt
 import cma
 import importlib
 
-from analytic_grad_single import Grad
+from thinshelllab.engine.analytic_grad_single import Grad
 
 importlib.invalidate_caches()
-Scene = importlib.import_module(f'Scene_{args.env}')
+Scene = importlib.import_module(f'thinshelllab.task_scene.Scene_{args.env}')
 
 tot_timestep = args.tot_step
 cloth_size=0.06

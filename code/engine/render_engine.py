@@ -4,7 +4,7 @@ import json
 import imageio
 
 from assets_lookup import texture_lookup, model_lookup, background_lookup
-from convert_luisa import *
+from .convert_luisa import *
 loader_dir = "../data/AssetLoader"
 
 def get_asset_maps(option, texture_scale, roughness):

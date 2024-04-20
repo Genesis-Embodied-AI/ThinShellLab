@@ -1,8 +1,8 @@
 import taichi as ti
 
-from model_fold_offset import Cloth
-from model_elastic_offset import Elastic
-from model_elastic_tactile import Elastic as tactile
+from ..engine.model_fold_offset import Cloth
+from ..engine.model_elastic_offset import Elastic
+from ..engine.model_elastic_tactile import Elastic as tactile
 
 from typing import List
 import taichi as ti
@@ -11,7 +11,7 @@ from dataclasses import dataclass
 import os
 import numpy as np
 import matplotlib.pyplot as plt
-from BaseScene import BaseScene
+from ..engine.BaseScene import BaseScene
 
 vec3 = ti.types.vector(3, ti.f64)
 vec3i = ti.types.vector(3, ti.i32)

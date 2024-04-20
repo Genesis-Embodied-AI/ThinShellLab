@@ -26,4 +26,5 @@ dependencies = [
     "trimesh"
 ]
 
-# TODO: paths
+[tool.setuptools.package-dir]
+thinshelllab = "code"

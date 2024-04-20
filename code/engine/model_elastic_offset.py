@@ -1,11 +1,11 @@
 import argparse
 
 import numpy as np
-
-import taichi as ti
-from sparse_solver import SparseMatrix
 import os
-import readfile
+import taichi as ti
+
+from .sparse_solver import SparseMatrix
+from . import readfile
 
 @ti.data_oriented
 class Elastic:
