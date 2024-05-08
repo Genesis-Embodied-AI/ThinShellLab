@@ -49,3 +49,14 @@ sh scripts/run_trajopt_folding.sh
 ```
 to train a trajectory optimization policy for the folding task, or use other scripts to train on different tasks.
 
+## Citation
+If you find this codebase/paper useful for your research, please consider citing:
+```
+@inproceedings{wang2023thin,
+  title={Thin-Shell Object Manipulations With Differentiable Physics Simulations},
+  author={Wang, Yian and Zheng, Juntian and Chen, Zhehuan and Xian, Zhou and Zhang, Gu and Liu, Chao and Gan, Chuang},
+  booktitle={The Twelfth International Conference on Learning Representations},
+  year={2023}
+}
+```
+
