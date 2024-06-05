@@ -1,11 +1,3 @@
-""" 
-    tactile_env.py
-    Implemented by Elgce August, 2023
-    TactileEnv class inherited from gym.Env
-    Wrap implemented Contact_models like Surface_follow
-    For use of stable-baselines3
-"""
-
 import gymnasium as gym
 import numpy as np
 from gymnasium import spaces
